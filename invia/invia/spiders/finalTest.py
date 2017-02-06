@@ -8,6 +8,7 @@ import json
 class MySpider(scrapy.Spider):
     name = 'authtest3'
     start_urls = ['https://www.invia.cz/direct/community_login/ajax-login/?ac_email=zisi%40electratours.cz&ac_password=electra1999']
+    
 
     def start_requests(self):
         return [scrapy.FormRequest("https://www.invia.cz/direct/community_login/ajax-login/?ac_email=zisi%40electratours.cz&ac_password=electra1999",
@@ -35,15 +36,21 @@ class MySpider(scrapy.Spider):
         PD=[json.loads(d)["d_end"] for d in data]
 
         PR=[json.loads(d)["c_price_from"] for d in data]
-        
+
+        Dates=sel.css('li>a>div>p>strong.date::text').extract()
+
+        MealType=sel.css('span.blue::text').extract()
+        #sel.xpath('normalize-space(.//strong[@class="date"])').extract()
+       
         for x in range(0,len(data)):
            IC[x]=''.join(map(str, IC[x]))
-
+           
+        
 
 
         ICn=[j.strip() for j in IC]
         
-        
+       
         
         
 
@@ -51,10 +58,13 @@ class MySpider(scrapy.Spider):
               yield{
 
               'InviaCode':ICn[x],
+              'Dates':Dates[x],
+              'MealType':MealType[x],
               'PeriodStart':PS[x],
               'PeriodEnd':PD[x],
               'Operator':Op[x].strip(),
               'Price':PR[x]
+              
 
 
                   }
@@ -64,3 +74,4 @@ class MySpider(scrapy.Spider):
         url = re.sub('page=\d+', 'page=' + next_page, response.url)
         yield scrapy.Request(url, self.logged_in)
 
+   
