@@ -1,0 +1,46 @@
+#!/bin/bash
+NOW=$(date +"%m-%d-%Y-%k-%M")
+
+###########################################Kreta########################################################
+
+Kreta=$(curl -u ddb773dac97e4a6aa2a648ec5a660104: "https://app.scrapinghub.com/api/jobs/list.json?project=156822&spider=Kreta&state=finished&count=4" | jq '.jobs[0] .id') #Taking the id of a job that have be done
+
+curl -u ddb773dac97e4a6aa2a648ec5a660104: "https://storage.scrapinghub.com/items/"$(echo "$Kreta" | tr -d '"')"?format=csv&fields=Destination,InviaCode,Dates,MealType,Operator,Price&nclude_headers=1" --output Kreta$NOW.csv    #Download the CSV for that job id
+
+
+curl -u ddb773dac97e4a6aa2a648ec5a660104: https://app.scrapinghub.com/api/jobs/delete.json -d project=156822 -d job=$(echo "$Kreta" | tr -d '"')  #deletes the current job data
+
+
+###########################################Rhodos#########################################################################
+
+Rhodos=$(curl -u ddb773dac97e4a6aa2a648ec5a660104: "https://app.scrapinghub.com/api/jobs/list.json?project=156822&spider=Rhodos&state=finished&count=4" | jq '.jobs[0] .id') #Taking the id of a job that have be done
+
+curl -u ddb773dac97e4a6aa2a648ec5a660104: "https://storage.scrapinghub.com/items/"$(echo "$Rhodos" | tr -d '"')"?format=csv&fields=Destination,InviaCode,Dates,MealType,Operator,Price&nclude_headers=1" --output Rhodos$NOW.csv    #Download the CSV for that job id
+
+
+curl -u ddb773dac97e4a6aa2a648ec5a660104: https://app.scrapinghub.com/api/jobs/delete.json -d project=156822 -d job=$(echo "$Rhodos" | tr -d '"')  #deletes the current job data
+
+
+##########################################Zakynthos#####################################################################
+
+Zakynthos=$(curl -u ddb773dac97e4a6aa2a648ec5a660104: "https://app.scrapinghub.com/api/jobs/list.json?project=156822&spider=Zakynthos&state=finished&count=4" | jq '.jobs[0] .id') #Taking the id of a job that have be done
+
+curl -u ddb773dac97e4a6aa2a648ec5a660104: "https://storage.scrapinghub.com/items/"$(echo "$Zakynthos" | tr -d '"')"?format=csv&fields=Destination,InviaCode,Dates,MealType,Operator,Price&nclude_headers=1" --output Zakynthos$NOW.csv    #Download the CSV for that job id
+
+
+curl -u ddb773dac97e4a6aa2a648ec5a660104: https://app.scrapinghub.com/api/jobs/delete.json -d project=156822 -d job=$(echo "$Zakynthos" | tr -d '"')  #deletes the current job data
+
+
+######################################Corfu################################################################
+
+Corfu=$(curl -u ddb773dac97e4a6aa2a648ec5a660104: "https://app.scrapinghub.com/api/jobs/list.json?project=156822&spider=Corfu&state=finished&count=4" | jq '.jobs[0] .id') #Taking the id of a job that have be done
+
+curl -u ddb773dac97e4a6aa2a648ec5a660104: "https://storage.scrapinghub.com/items/"$(echo "$Corfu" | tr -d '"')"?format=csv&fields=Destination,InviaCode,Dates,MealType,Operator,Price&nclude_headers=1" --output Corfu$NOW.csv    #Download the CSV for that job id
+
+
+curl -u ddb773dac97e4a6aa2a648ec5a660104: https://app.scrapinghub.com/api/jobs/delete.json -d project=156822 -d job=$(echo "$Corfu" | tr -d '"')  #deletes the current job data
+
+
+##########################################################################################################################
+
+
