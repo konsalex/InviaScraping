@@ -24,40 +24,46 @@ class MySpider(scrapy.Spider):
         data=json.loads(response.text)
 
         sel=Selector(text=data['boxes_html'])
+        ag=Selector(text=data['boxes_html'])
+        ko=sel.css('li.hotel-box').extract()  
 
-        data=sel.xpath('//li/@data-content-value').extract()
+        for x in range(0,len(ko)):
+          sel=Selector(text=ko[x])
 
-        Op=sel.css('a>div:nth-child(2)>p.r::text').extract()
+          name=sel.css('span.name::text').extract_first()
 
-        IC=[json.loads(d)["nl_hotel_id"] for d in data]
+          data=sel.xpath('//li/@data-content-value').extract()
+
+          Op=sel.css('a>div:nth-child(2)>p.r::text').extract()
+
+          IC=[json.loads(d)["nl_hotel_id"] for d in data]
         
-        PS=[json.loads(d)["d_start"] for d in data]
+          PS=[json.loads(d)["d_start"] for d in data]
 
-        PD=[json.loads(d)["d_end"] for d in data]
+          PD=[json.loads(d)["d_end"] for d in data]
 
-        PR=[json.loads(d)["c_price_from"] for d in data]
+          PR=[json.loads(d)["c_price_from"] for d in data]
 
-        Dates=sel.css('li>a>div>p>strong.date::text').extract()
+          Dates=sel.css('li>a>div>p>strong.date::text').extract()
 
-        MealType=sel.css('span.blue::text').extract()
-        #sel.xpath('normalize-space(.//strong[@class="date"])').extract()
+          MealType=sel.css('span.blue::text').extract()
+          #sel.xpath('normalize-space(.//strong[@class="date"])').extract()
        
-        for x in range(0,len(data)):
+          for x in range(0,len(data)):
            IC[x]=''.join(map(str, IC[x]))
            
         
 
 
-        ICn=[j.strip() for j in IC]
-        
-       
-        
-        
+          ICn=[j.strip() for j in IC]
 
-        for x in range(0,len(data)):
+
+
+          for x in range(0,len(data)):
+              Dates[x]=Dates[x].strip()
               yield{
 
-              
+              'HotelName': name,
               'Destination':"Corfu",
               'InviaCode':ICn[x],
               'Dates':Dates[x],
@@ -66,7 +72,7 @@ class MySpider(scrapy.Spider):
               'Price':PR[x]
               }
 
-        next_page = sel.css("a.next::attr(data-page)").extract_first()
+        next_page = ag.css("a.next::attr(data-page)").extract_first()
         print("Page %s -1" %next_page)
         url = re.sub('page=\d+', 'page=' + next_page, response.url)
         yield scrapy.Request(url, self.logged_in)
