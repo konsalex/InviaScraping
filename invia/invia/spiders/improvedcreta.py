@@ -18,7 +18,7 @@ class MySpider(scrapy.Spider):
 
     def after_login(self, response):
              
-            return scrapy.Request(url="https://dovolena.invia.cz/direct/tour_search/ajax-next-boxes/?nl_country_id%5B%5D=28&nl_locality_id%5B%5D=19&d_start_from=16.02.2017&nl_transportation_id%5B%5D=3&sort=nl_sell&page=1&getOptionsCount=true&base_url=https%3A%2F%2Fdovolena.invia.cz%2F",callback=self.logged_in)
+            return scrapy.Request(url="https://dovolena.invia.cz/direct/tour_search/ajax-next-boxes/?nl_country_id%5B%5D=28&nl_locality_id%5B%5D=19&d_start_from=09.06.2017&d_end_to=16.06.2017&nl_length_int%5B%5D=7%7C9&nl_length_int%5B%5D=10%7C12&nl_length_int%5B%5D=13%7C&nl_transportation_id%5B%5D=3&sort=nl_sell&page=1&getOptionsCount=true&base_url=https%3A%2F%2Fdovolena.invia.cz%2F",callback=self.logged_in)
 
     def logged_in(self, response):
         data=json.loads(response.text)
