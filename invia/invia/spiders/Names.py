@@ -61,4 +61,4 @@ class MySpider(scrapy.Spider):
         url = re.sub('page=\d+', 'page=' + next_page, response.url)
         yield scrapy.Request(url, self.logged_in)
 
-   
+

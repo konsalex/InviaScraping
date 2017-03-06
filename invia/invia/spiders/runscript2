@@ -1,0 +1,13 @@
+#!/bin/bash
+
+
+cd ./output
+
+python reorder.py
+
+python Compined.py
+
+
+
+
+

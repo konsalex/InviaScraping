@@ -1,0 +1,34 @@
+#!/bin/bash
+
+echo "Starting Scraping Process"
+
+
+
+echo "Starting Kreta Spider"
+
+scrapy crawl Kreta -o Kreta.csv
+
+echo "Starting Corfu Spider"
+
+scrapy crawl Corfu -o Corfu.csv
+
+echo "Starting Zakynthos Spider"
+
+scrapy crawl Zakynthos -o Zakynthos.csv
+
+echo "Starting Rhodos Spider"
+
+scrapy crawl Rhodos -o Rhodos.csv
+
+mv *csv output
+
+cd ./output
+
+python reorder.py
+
+python Compined.py
+
+
+
+
+
