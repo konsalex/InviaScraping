@@ -2,6 +2,7 @@ import scrapy
 import re
 from scrapy.selector import Selector
 import json
+
 #from invia.items import InviaItems
 
 
@@ -18,12 +19,16 @@ class MySpider(scrapy.Spider):
 
     def after_login(self, response):
 
-            return scrapy.Request(url="https://dovolena.invia.cz/direct/tour_search/ajax-next-boxes/?nl_country_id%5B%5D=28&nl_locality_id%5B%5D=13&d_start_from=10.03.2017&nl_transportation_id%5B%5D=3&nl_ck_id%5B%5D=62&sort=nl_sell&page=1&getOptionsCount=true&base_url=https%3A%2F%2Fdovolena.invia.cz%2F",callback=self.logged_in)
+            return scrapy.Request(url="https://dovolena.invia.cz/direct/tour_search/ajax-next-boxes/?nl_country_id[]=28&nl_locality_id[]=19&d_start_from=12.03.2017&nl_length_int[]=7|9&nl_length_int[]=10|12&nl_length_int[]=13|&nl_ck_id[]=62&sort=nl_sell&page=1&getOptionsCount=true&base_url=https%3A%2F%2Fdovolena.invia.cz%2F",callback=self.logged_in)
 
     def logged_in(self, response):
         data=json.loads(response.text)
-
-        sel=Selector(text=data['boxes_html'])
+	if(data['error']==0):
+            sel=Selector(text=data['boxes_html'])
+	elif (data['error']!=1):
+	    request=scrapy.Request(url=response.url,callback=self.logged_in)
+            yield request
+	    return 
         ag=Selector(text=data['boxes_html'])
         ko=sel.css('li.hotel-box').extract()
 
@@ -34,20 +39,20 @@ class MySpider(scrapy.Spider):
 
           data=sel.xpath('//li/@data-content-value').extract()
 
-          IC=[json.loads(d)["nl_hotel_id"] for d in data]
-
+          IC=[json.loads(d)["nl_hotel_id"] for d in data]   
+         
+          
           for x in range(0,len(data)):
            IC[x]=''.join(map(str, IC[x]))
 
           ICn=[j.strip() for j in IC]
 
-          print (ICn[x])
-
+          
           url1="https://dovolena.invia.cz/direct/tour_search/ajax-next-box-rows/nl_hotel_id/"
 
           url2=ICn[x]
 
-          url3="/?nl_country_id%5B%5D=28&nl_locality_id%5B%5D=13&d_start_from=10.03.2017&nl_transportation_id%5B%5D=3&nl_ck_id%5B%5D=62&sort=nl_sell&boxPage=1"
+          url3="/?nl_country_id[]=28&nl_locality_id[]=19&d_start_from=12.03.2017&nl_length_int[]=7|9&nl_length_int[]=10|12&nl_length_int[]=13|&nl_ck_id[]=62&sort=nl_sell&boxPage=1"
 
           url_final=url1+url2+url3
 
@@ -56,6 +61,7 @@ class MySpider(scrapy.Spider):
           request=scrapy.Request(url=str(url_final),callback=self.hotel)
 
           request.meta["name"]=name
+	  request.meta["invia"]=ICn[x]
 
           yield request
 
@@ -66,8 +72,10 @@ class MySpider(scrapy.Spider):
           yield scrapy.Request(url, self.logged_in)
 
     def hotel(self,response):
+      
       after=response.css('li').extract()
       names = response.meta['name']
+      inviacode=response.meta["invia"]
       for x in xrange(0,len(after)):
         af=Selector(text=after[x])
         dates=af.css("strong.date::text").extract_first()
@@ -79,6 +87,7 @@ class MySpider(scrapy.Spider):
         oper=oper.strip()
         dates=dates.strip()
         yield{
+        "InviaCode":inviacode,
         "Operator":oper,
         "Hotel":names,
         "Dates":dates,
@@ -94,6 +103,7 @@ class MySpider(scrapy.Spider):
         url = re.sub('boxPage=\d+', 'boxPage=' + next_page, response.url)
         request=scrapy.Request(url,callback=self.hotel)
         request.meta["name"]=name
+        request.meta["invia"]=inviacode
         yield request
       else:
         return
