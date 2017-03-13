@@ -3,7 +3,7 @@ import re
 from scrapy.selector import Selector
 import json
 
-#from invia.items import InviaItems
+
 
 
 class MySpider(scrapy.Spider):
@@ -19,7 +19,7 @@ class MySpider(scrapy.Spider):
 
     def after_login(self, response):
 
-            return scrapy.Request(url="https://dovolena.invia.cz/direct/tour_search/ajax-next-boxes/?nl_country_id[]=28&nl_locality_id[]=19&d_start_from=12.03.2017&nl_length_int[]=7|9&nl_length_int[]=10|12&nl_length_int[]=13|&nl_ck_id[]=62&sort=nl_sell&page=1&getOptionsCount=true&base_url=https%3A%2F%2Fdovolena.invia.cz%2F",callback=self.logged_in)
+            return scrapy.Request(url="https://dovolena.invia.cz/direct/tour_search/ajax-next-boxes/?nl_country_id%5B%5D=28&nl_locality_id%5B%5D=13&d_start_from=13.03.2017&d_end_to=12.05.2017&sort=nl_sell&page=1&getOptionsCount=true&base_url=https%3A%2F%2Fdovolena.invia.cz%2F",callback=self.logged_in)
 
     def logged_in(self, response):
         data=json.loads(response.text)
@@ -52,7 +52,7 @@ class MySpider(scrapy.Spider):
 
           url2=ICn[x]
 
-          url3="/?nl_country_id[]=28&nl_locality_id[]=19&d_start_from=12.03.2017&nl_length_int[]=7|9&nl_length_int[]=10|12&nl_length_int[]=13|&nl_ck_id[]=62&sort=nl_sell&boxPage=1"
+          url3="/?nl_country_id%5B%5D=28&nl_locality_id%5B%5D=13&d_start_from=13.03.2017&d_end_to=12.05.2017&sort=nl_sell&boxPage=1"
 
           url_final=url1+url2+url3
 
