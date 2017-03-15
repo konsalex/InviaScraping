@@ -89,9 +89,9 @@ class MySpider(scrapy.Spider):
                 'Price':PR[x]
                 }
           if (ag.css("a.next::attr(data-page)")):
-           next_page = ag.css("a.next::attr(data-page)").extract_first()
-          print("Page %s -1" %next_page)
-          url = re.sub('page=\d+', 'page=' + next_page, response.url)
-          yield scrapy.Request(url, self.logged_in)
-        else:
-          return  
+              next_page = ag.css("a.next::attr(data-page)").extract_first()
+              print("Page %s -1" %next_page)
+              url = re.sub('page=\d+', 'page=' + next_page, response.url)
+              yield scrapy.Request(url, self.logged_in)
+          else:
+              return  

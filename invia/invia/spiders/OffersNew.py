@@ -7,7 +7,7 @@ import json
 
 
 class MySpider(scrapy.Spider):
-    name = 'Offers'
+    name = 'OffersNew'
     start_urls = ['https://www.invia.cz/direct/community_login/ajax-login/?ac_email=zisi%40electratours.cz&ac_password=electra1999']
     download_delay = 0.5
 
@@ -40,7 +40,10 @@ class MySpider(scrapy.Spider):
           data=sel.xpath('//li/@data-content-value').extract()
 
           IC=[json.loads(d)["nl_hotel_id"] for d in data]   
-         
+          
+          Dest2=sel.css('div.wrap>div.content>p.location::text').extract()
+          Dest=Dest2[1].strip().rsplit('\t', 1)[1] 
+
           
           for x in range(0,len(data)):
            IC[x]=''.join(map(str, IC[x]))
@@ -62,6 +65,7 @@ class MySpider(scrapy.Spider):
 
           request.meta["name"]=name
           request.meta["invia"]=ICn[x]
+          request.meta["dest"]=Dest
 
           yield request
 
@@ -76,6 +80,7 @@ class MySpider(scrapy.Spider):
       after=response.css('li').extract()
       names = response.meta['name']
       inviacode=response.meta["invia"]
+      dest=response.meta["dest"]
       for x in xrange(0,len(after)):
         af=Selector(text=after[x])
         dates=af.css("strong.date::text").extract_first()
@@ -93,7 +98,8 @@ class MySpider(scrapy.Spider):
         "Dates":dates,
         "Airport":airport,
         "MealType":meal,
-        "Minute":minute
+        "Minute":minute,
+        "Destination":dest
         }
 
 
