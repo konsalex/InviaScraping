@@ -110,6 +110,7 @@ class MySpider(scrapy.Spider):
         request=scrapy.Request(url,callback=self.hotel)
         request.meta["name"]=name
         request.meta["invia"]=inviacode
+        request.meta["dest"]=dest
         yield request
       else:
         return
