@@ -1,5 +1,4 @@
 setup.py
-invia/__init__.py
 invia/items.py
 invia/middlewares.py
 invia/pipelines.py
@@ -9,11 +8,6 @@ invia/spiders/Names.py
 invia/spiders/Rhodos.py
 invia/spiders/Zakynthos.py
 invia/spiders/__init__.py
-invia/spiders/authtest.py
-invia/spiders/authtest2.py
-invia/spiders/finalTest.py
-invia/spiders/inviaspider.py
-invia/spiders/itemtest.py
 invia/spiders/kreta.py
 project.egg-info/PKG-INFO
 project.egg-info/SOURCES.txt
