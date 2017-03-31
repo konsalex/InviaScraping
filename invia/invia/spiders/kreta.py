@@ -83,8 +83,8 @@ class MySpider(scrapy.Spider):
                 'HotelName': name,
                 'Destination':"Kreta",
                 'InviaCode':ICn[x],
-               'Dates':Dates[x],
-               'MealType':MealType[x],
+                'Dates':Dates[x],
+                'MealType':MealType[x],
                 'Operator':Op[x].strip(),
                 'Price':PR[x]
                 }

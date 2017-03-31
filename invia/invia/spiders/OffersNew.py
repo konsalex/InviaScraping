@@ -3,7 +3,9 @@ import re
 from scrapy.selector import Selector
 import json
 
+global desti
 
+desti=["Praha","Brno"," "]
 
 
 class MySpider(scrapy.Spider):
@@ -84,23 +86,79 @@ class MySpider(scrapy.Spider):
       for x in xrange(0,len(after)):
         af=Selector(text=after[x])
         dates=af.css("strong.date::text").extract_first()
-        prices=af.css("strong.orange").extract_first()
+        prices=af.css("strong.orange::text").extract_first()
         airport=af.css("p.info>span::attr(title)").extract_first()
         meal=af.css("span.blue::text").extract_first()
         minute=af.css("span.symptom::text").extract_first()
         oper=af.css("div:nth-child(2)>p.r::text").extract_first()
         oper=oper.strip()
-        dates=dates.strip()
-        yield{
-        "InviaCode":inviacode,
-        "Operator":oper,
-        "Hotel":names,
-        "Dates":dates,
-        "Airport":airport,
-        "MealType":meal,
-        "Minute":minute,
-        "Destination":dest
-        }
+        dates=dates.strip().split('\n')
+
+        if (airport=="Letecky - Praha"):
+            yield{
+               "InviaCode":inviacode,
+               "Operator":oper,
+               "Hotel":names,
+               "Dates":dates[0],
+               "Airport":desti[0],
+               "MealType":meal,
+               "Minute":minute,
+               "Destination":dest,
+               "Price":prices
+               }
+        elif(airport=="Letecky - Brno"):
+            yield{
+               "InviaCode":inviacode,
+               "Operator":oper,
+               "Hotel":names,
+               "Dates":dates[0],
+               "Airport":desti[1],
+               "MealType":meal,
+               "Minute":minute,
+               "Destination":dest,
+               "Price":prices
+               }
+        elif(airport=="Letecky - Praha, Brno"):
+
+            yield{
+               "InviaCode":inviacode,
+               "Operator":oper,
+               "Hotel":names,
+               "Dates":dates[0],
+               "Airport":desti[0],
+               "MealType":meal,
+               "Minute":minute,
+               "Destination":dest,
+               "Price":prices
+               }
+            yield{
+               "InviaCode":inviacode,
+               "Operator":oper,
+               "Hotel":names,
+               "Dates":dates[0],
+               "Airport":desti[1],
+               "MealType":meal,
+               "Minute":minute,
+               "Destination":dest,
+               "Price":prices
+               }
+
+        else:
+            yield{
+               "InviaCode":inviacode,
+               "Operator":oper,
+               "Hotel":names,
+               "Dates":dates[0],
+               "Airport":desti[2],
+               "MealType":meal,
+               "Minute":minute,
+               "Destination":dest,
+               "Price":prices
+               }
+
+
+
+
 
 
       if(response.css("a.next")):

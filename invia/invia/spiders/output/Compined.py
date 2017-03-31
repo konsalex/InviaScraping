@@ -2,7 +2,16 @@ import glob
 import os
 
 
+
+
+os.remove("Corfuordered.csv")
+os.remove("Kretaordered.csv")
+os.remove("Rhodosordered.csv")
+os.remove("Zakynthosordered.csv")
+
+
 interesting_files = glob.glob("*.csv") 
+
 
 header_saved = False
 with open('compined.csv','wb') as fout:
@@ -16,13 +25,5 @@ with open('compined.csv','wb') as fout:
                 fout.write(line)
 
 
-os.remove("Corfu.csv")
-os.remove("Kreta.csv")
-os.remove("Corfuordered.csv")
-os.remove("Kretaordered.csv")
-os.remove("Rhodos.csv")
-os.remove("Rhodosordered.csv")
-os.remove("Zakynthos.csv")
-os.remove("Zakynthosordered.csv")
 
 

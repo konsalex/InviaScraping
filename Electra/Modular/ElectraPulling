@@ -1,0 +1,23 @@
+#!/bin/bash
+
+echo "Starting Pulling Electra Offers with xml format"
+
+
+python Get_Actual_Products.py
+
+echo "Starting Procesing Xml Files and Make CSV output"
+
+sleep 3s
+
+python xml_to_csv.py
+
+echo "Finished process"
+
+sleep 5s
+
+exit 0
+
+
+
+
+
